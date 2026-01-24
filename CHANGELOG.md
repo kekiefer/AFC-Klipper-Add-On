@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2026-01-24]
 ## Added
 - Support for tracking selecting/unselecting toolheads for toolchangers
+### Fixed
+- Resolved bug where when running `AFC_TEST_LANES` on a single lane, the z axis would not reset correctly, resulting in a constantly increasing z height.
 
 ## [2026-01-23]
 ## Added
