@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed M104/M109 macros to work as expected on tools when a lane is not yet loaded
 
+## [2026-01-31]
+### Added:
+- Added ability to remember last ejected spool via new `SET_REMEMBER_SPOOL` macro.
+
 ## [2026-01-29]
 ### Added:
 - Ability to supply custom macro name for tool_swaps with `custom_tool_swap` variable.
