@@ -5,7 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-<<<<<<< HEAD
 ## [2026-02-18]
 ### Fixed
 - Fixed M104/M109 macros to work as expected on tools when a lane is not yet loaded
@@ -19,8 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed:
 - Updated buffer logic to internally store active lane buffer is enabled for, this better allows multiple buffer to be active for different lanes in IDEX type setups.
 - Updated `on_shuttle` logic for setups like IDEX setups where KTC is not used but AFC_toolchanger is still included
-=======
->>>>>>> 5cd4cd5 ([update] Update copyright years in source files and add changelog uti… (#621))
+
+## [2026-01-28]
+### Added
+- The install-afc.sh script will now properly allow users to install the software from a .zip archive if a Git based installation is not available.
 
 ## [2026-01-24]
 ## Added
@@ -28,7 +29,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Resolved bug where when running `AFC_TEST_LANES` on a single lane, the z axis would not reset correctly, resulting in a constantly increasing z height.
 
-<<<<<<< HEAD
 ## [2026-01-23]
 ## Added
 - Support for using tool_probe instead of detection pin in Klipper-Toolchanger so AFC can properly detect which tool is loaded
@@ -36,8 +36,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `spoolman_set_active_spool` error during PREP
 - Fixed default poop macro for toolchangers with per-tool fans defined
 
-=======
->>>>>>> 5cd4cd5 ([update] Update copyright years in source files and add changelog uti… (#621))
 ## [2026-01-22]
 ### Changed
 - The install-afc.sh script will now allow users to install as root if it detects the user is running a SAF K1 environment.
@@ -67,7 +65,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed how average times are calculated. Use `AFC_RESET_STATS EXTRUDER=all` to use new `total_time/count` calculation.
 - Merged normal and skinny AFC_STATS printout into one function and changed printout format to work better with toolchangers.
 
-<<<<<<< HEAD
 ## [2026-01-02]
 ## Added
 - Added AFC_SET_TOOLHEAD_LED macro which sets print leds based off passed in mapping
@@ -78,12 +75,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2025-12-26]
 ### Changed:
-=======
 ## [December 2025]
 ### Added
 - Updated spool assist cruise time calculations to be more linear with spool weight
 ### Changed
->>>>>>> 5cd4cd5 ([update] Update copyright years in source files and add changelog uti… (#621))
 - Updated AFC_CUT macro to move to pin first before doing filament retraction.
 - Updated AFC_CUT macro so that is more safe for toolheads with cutters that move in the forwards/backwards movement. 
 - Updated AFC_CUT macro to clear pin once cutting is done so that is safer for toolheads with forward/backward cutters.
@@ -91,7 +86,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixing issue where order mattered when creating flat config files, replaced lookup_object with load_object so klipper would not error out and instead load object if it was not already loaded.
 - Fixed issue where AFC would crash klipper when trying to find git version when git folder does not exist
 - Fixed issue where AFC would cause error if log file variable was not passed into klipper service
-<<<<<<< HEAD
 
 ## [2025-12-14]
 ## Added
@@ -100,8 +94,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2025-12-11]
 ### Fixed
-=======
->>>>>>> 5cd4cd5 ([update] Update copyright years in source files and add changelog uti… (#621))
 - Fix output of `AFC_TOGGLE_MACRO` to correctly report state of WIPE macro
 - Fixes issue where klipper would crash for HTLF units when homing and moving lanes during prep
 - Fixes bug where print current is not correctly set back to correct value after using LANE_MOVE macro.
@@ -133,7 +125,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cleanup terminology around compressing/expanding of the buffer to make it easier to understand for users.
 ### Fixed
 - Buffer fault detection now respects the `enable` state and only triggers during active printing with movement
-<<<<<<< HEAD
 
 ## [2025-11-23]
 ### Added
@@ -188,7 +179,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2025-10-18]
 ### Fixes
-=======
 - Fixes an issue where spoolman was not updating a loaded spool in toolhead
 - Clarified fix message if during AFC calibration, the filament fails to reach to hub sensor.
 ### Update
@@ -202,7 +192,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed klipper crashing when commanding distance of zero for LANE_MOVE macro.
 - Resolved a bug where runout logic could potentially be triggered during a toolchange.
 - Resolved a bug where AFC_STATUS would crash klipper when using buffer as toolhead sensor and last lane was loaded into toolhead.
->>>>>>> 5cd4cd5 ([update] Update copyright years in source files and add changelog uti… (#621))
 - On startup, or when assigning a spool to a lane, AFC will now check the weight of the spool to check if it is either zero, null,
   or a negative value. If any of these conditions are met, AFC will not assign the spool. This check can be disabled by 
   setting `disable_weight_check: True` in the `[AFC]` section of the `AFC.cfg` file.
@@ -255,7 +244,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Issue where localhost and http were hardcoded, allows user to specify custom url. Fixes issue 484.
 - Updated code to inform users when trying to assign spoolman ID to a lane and that same spool ID is already assigned to another lane.
 - Race condition between klipper and moonraker when trying to get stats from moonraker database
-<<<<<<< HEAD
 
 ## [2025-07-03]
 ### Added
@@ -294,12 +282,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Errors when buffer or stepper objects were missing.
 
 ## [2025-06-28]
-=======
->>>>>>> 5cd4cd5 ([update] Update copyright years in source files and add changelog uti… (#621))
 ### Updated
 - The `install-afc.sh` script will now only copy relevant MCU files when installing a new unit. 
 
-<<<<<<< HEAD
 ## [2025-06-26]
 ### Added
 - `TOOL_SWAP` state and `tool_swap` method: Enables robust tool swapping between extruders.
@@ -325,9 +310,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Errors when buffer or stepper objects were missing.
 
 ## [2025-06-23]
-=======
 ## [June 2025]
->>>>>>> 5cd4cd5 ([update] Update copyright years in source files and add changelog uti… (#621))
 ### Added
 - Runout/break/jam detection for hub and toolhead sensors:
 - If the toolhead or hub sensor detects runout but upstream sensors still detect filament, the print is paused and the user is notified of a possible break/jam (no eject or endless spool mode is attempted).
