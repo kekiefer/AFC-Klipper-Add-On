@@ -31,6 +31,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - The install-afc.sh script will now properly allow users to install the software from a .zip archive if a Git based installation is not available.
 
+## [2026-02-02]
+### Added:
+- `ignore_spoolman_material_temps` configuration option added to ignore extruder temperature set in spoolman and instead fallback to default material temps when switching filament
+
 ## [2026-01-24]
 ## Added
 - Support for tracking selecting/unselecting toolheads for toolchangers
