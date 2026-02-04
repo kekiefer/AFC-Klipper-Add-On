@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed M104/M109 macros to work as expected on tools when a lane is not yet loaded
 
+## [2026-02-01]
+### Added:
+- Update Cut Macro to support kalico-bleeding-edge-v2 nonlinear pressure advance
+
 ## [2026-01-31]
 ### Added:
 - Added ability to remember last ejected spool via new `SET_REMEMBER_SPOOL` macro.
