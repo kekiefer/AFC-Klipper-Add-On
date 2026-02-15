@@ -594,6 +594,39 @@ class afc:
 
         return wait
 
+    def _capture_toolhead_temp(self):
+        """
+        Helper function to capture current toolhead target temperature when not printing.
+
+        :return dict with extruder and target_temp, or None if printing or restore_extruder_temp_on_load_or_unload is False
+        """
+        if not self.restore_extruder_temp_on_load_or_unload:
+            return None
+        if self.function.is_printing():
+            return None
+        extruder = self.toolhead.get_extruder()
+        heater = extruder.get_heater()
+        return {"extruder": extruder, "target_temp": heater.target_temp}
+
+    def _restore_toolhead_temp(self, temp_state):
+        """
+        Helper function to restore toolhead target temperature after load/unload when not printing AND restore_extruder_temp_on_load_or_unload is True
+
+        :param temp_state: Dictionary containing extruder object and target_temp, or None
+        """
+        if not self.restore_extruder_temp_on_load_or_unload:
+            return
+        if not temp_state:
+            return
+        if self.function.is_printing():
+            return
+        try:
+            pheaters = self.printer.lookup_object('heaters')
+            pheaters.set_temperature(temp_state["extruder"].get_heater(), temp_state["target_temp"], wait=False)
+            self.logger.info("Restoring extruder temperature to {}".format(temp_state["target_temp"]))
+        except Exception:
+            self.logger.debug("Unable to restore extruder temperature", exc_info=True)
+
     def _set_quiet_mode(self, val):
         """
         Helper function to set quiet mode to on or off
@@ -1241,8 +1274,14 @@ class afc:
                 self.save_vars()
                 cur_lane.unit_obj.lane_loading( cur_lane )
 
+                temp_state = self._capture_toolhead_temp()
+
                 # Run the load sequence, which may include custom gcode commands.
-                if not self.load_sequence(cur_lane, cur_hub, cur_extruder):
+                result = self.load_sequence(cur_lane, cur_hub, cur_extruder):
+
+                self._restore_toolhead_temp(temp_state)
+
+                if not result:
                     return False
 
                 # Activate the tool-loaded LED and handle filament operations if enabled.
@@ -1602,8 +1641,14 @@ class afc:
             # Lookup current hub object using the lane's information.
             cur_hub = cur_lane.hub_obj
 
+            temp_state = self._capture_toolhead_temp()
+
             # Run the unload sequence, which may include custom gcode commands.
-            if not self.unload_sequence(cur_lane, cur_hub, cur_extruder):
+            result = self.unload_sequence(cur_lane, cur_hub, cur_extruder):
+
+            self._restore_toolhead_temp(temp_state)
+
+            if not result:
                 return False
 
             unload_time = self.afcDeltaTime.log_major_delta("Lane {} unload done".format(cur_lane.name if cur_lane is not None else "None"))

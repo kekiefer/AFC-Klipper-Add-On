@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed M104/M109 macros to work as expected on tools when a lane is not yet loaded
 
+## [2026-02-11]
+### Added
+- Ability to save current extrude temp when loading/unloading and restore temp if `restore_extruder_temp_on_load_or_unload` is set in AFC.cfg
+
 ## [2026-02-09]
 ### Added
 - The `update-afc.sh` and `install-afc.sh` script will now show a warning if it is unable to restart Klipper when either upgrading or installing the 
