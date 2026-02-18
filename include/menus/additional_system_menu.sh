@@ -121,7 +121,7 @@ printf "
                           \e[49m                   \e[49;38;5;0m▀▀▀▀▀\e[49m             \e[m
 ";
 printf "                      HappyTurtleLettuceFeeder by ArmoredTurtle\n";
-        elif [ "$installation_type" == "VVD" ]; then
+        elif [ "$installation_type" == "ViViD" ]; then
 printf "\e[49m                \e[48;2;255;255;255m              \e[38;2;255;255;255;49m▄\e[49m                     \e[38;2;255;255;255;49m▄▄\e[48;2;255;255;255m             \e[49m             \e[m
 \e[49m                 \e[49;38;2;255;255;255m▀\e[48;2;255;255;255m              \e[49m                   \e[38;2;255;255;255;49m▄\e[48;2;255;255;255m             \e[49;38;2;255;255;255m▀\e[49m              \e[m
 \e[38;2;255;255;255;49m▄▄▄▄▄▄▄▄\e[49m            \e[38;2;255;255;255;49m▄▄▄▄▄▄▄▄▄▄▄▄\e[49m  \e[38;2;255;255;255;49m▄▄▄▄\e[49m             \e[38;2;255;255;255;49m▄▄▄▄▄▄▄▄▄▄▄▄\e[49m \e[38;2;255;255;255;49m▄▄▄▄\e[49m            \e[m
@@ -146,7 +146,7 @@ printf "\e[49m                \e[48;2;255;255;255m              \e[38;2;255;255;
 \e[49m   \e[38;2;78;78;177;48;2;78;78;167m▄\e[38;2;83;95;172;48;2;91;89;166m▄\e[38;2;78;98;174;48;2;91;82;164m▄\e[38;2;64;106;177;49m▄\e[38;2;55;109;182;49m▄\e[38;2;46;109;182;49m▄\e[38;2;38;113;179;49m▄\e[38;2;19;113;189;49m▄\e[38;2;9;123;189;49m▄\e[38;2;0;123;189;49m▄\e[38;2;0;132;198;49m▄▄\e[38;2;0;137;206;49m▄\e[38;2;0;153;214;49m▄▄▄\e[38;2;0;153;224;49m▄\e[38;2;0;159;234;49m▄\e[38;2;0;170;234;49m▄▄\e[38;2;0;166;233;49m▄\e[38;2;0;166;222;49m▄\e[38;2;0;174;220;49m▄\e[38;2;0;170;231;49m▄\e[38;2;0;170;206;49m▄▄\e[38;2;0;179;204;49m▄\e[38;2;0;179;191;49m▄\e[38;2;0;166;179;49m▄\e[38;2;0;174;188;49m▄\e[38;2;0;174;174;49m▄\e[38;2;0;161;161;49m▄\e[38;2;0;170;170;49m▄\e[38;2;0;170;142;49m▄\e[38;2;0;165;150;49m▄\e[38;2;0;175;143;49m▄\e[38;2;0;159;143;49m▄\e[38;2;0;170;136;49m▄\e[38;2;0;153;119;49m▄\e[38;2;0;164;128;49m▄\e[38;2;0;164;109;49m▄\e[38;2;0;157;98;49m▄\e[49m                                   \e[m
 \e[49m    \e[49;38;2;81;97;174m▀\e[49;38;2;74;102;176m▀\e[49;38;2;67;105;178m▀\e[49;38;2;60;110;181m▀\e[49;38;2;51;113;184m▀\e[49;38;2;36;116;186m▀\e[49;38;2;21;121;190m▀\e[49;38;2;12;126;195m▀\e[49;38;2;4;130;198m▀\e[49;38;2;0;135;203m▀\e[49;38;2;0;140;206m▀\e[49;38;2;0;145;211m▀\e[49;38;2;0;149;216m▀\e[49;38;2;0;154;219m▀\e[49;38;2;0;157;223m▀\e[49;38;2;0;163;227m▀\e[49;38;2;0;165;231m▀\e[49;38;2;0;170;235m▀\e[49;38;2;0;173;239m▀\e[49;38;2;0;173;236m▀\e[49;38;2;0;173;230m▀\e[49;38;2;0;172;223m▀\e[49;38;2;0;171;214m▀\e[49;38;2;0;172;209m▀\e[49;38;2;0;170;203m▀\e[49;38;2;0;171;198m▀\e[49;38;2;0;170;192m▀\e[49;38;2;0;170;185m▀\e[49;38;2;0;170;181m▀\e[49;38;2;0;170;175m▀\e[49;38;2;0;170;170m▀\e[49;38;2;0;169;164m▀\e[49;38;2;0;169;158m▀\e[49;38;2;0;168;153m▀\e[49;38;2;0;169;148m▀\e[49;38;2;0;167;142m▀\e[49;38;2;0;168;137m▀\e[49;38;2;0;167;132m▀\e[49;38;2;0;167;126m▀\e[49;38;2;0;166;121m▀\e[49;38;2;0;166;115m▀\e[49;38;2;0;167;109m▀\e[49;38;2;0;166;104m▀\e[49;38;2;0;166;98m▀\e[49;38;2;0;165;94m▀\e[49;38;2;0;166;89m▀\e[49;38;2;0;166;85m▀\e[49;38;2;0;166;81m▀\e[49;38;2;0;167;79m▀\e[49;38;2;0;168;78m▀\e[49;38;2;0;170;77m▀\e[49;38;2;7;173;76m▀\e[49;38;2;26;176;74m▀\e[49;38;2;46;178;74m▀\e[49;38;2;62;181;71m▀\e[49;38;2;76;184;71m▀\e[49;38;2;93;186;69m▀\e[49;38;2;107;189;68m▀\e[49;38;2;117;191;66m▀\e[49;38;2;128;193;63m▀\e[49;38;2;137;197;61m▀\e[49;38;2;146;199;59m▀\e[49;38;2;157;203;57m▀\e[49;38;2;166;205;54m▀\e[49;38;2;176;211;51m▀\e[49;38;2;184;212;47m▀\e[49;38;2;196;216;42m▀\e[49;38;2;205;219;36m▀\e[49;38;2;218;224;29m▀\e[49;38;2;227;227;19m▀\e[49;38;2;237;232;11m▀\e[49;38;2;244;235;5m▀\e[49;38;2;249;240;0m▀\e[49;38;2;253;239;0m▀\e[49;38;2;255;246;0m▀\e[49m \e[m
 ";
-printf "                                  VVD by BIGTREETECH \n";
+printf "                                  ViViD by BIGTREETECH \n";
     elif [ "$installation_type" == "QuattroBox" ]; then
 printf "
                   \e[49m \e[38;5;97;49m▄\e[38;5;97;48;5;97m▄\e[48;5;97m                              \e[38;5;97;48;5;97m▄\e[38;5;97;49m▄\e[49m                \e[m
@@ -202,7 +202,7 @@ fi
         fi
         printf "1. BoxTurtle Name: %s \n" "$boxturtle_name"
       elif [ "$installation_type" == "NightOwl" ]; then
-        boxturtle_name="NightOwl_2"
+        boxturtle_name="NightOwl_1"
         printf "1. NightOwl Name: %s \n" "$boxturtle_name"
       elif [ "$installation_type" == "HTLF" ]; then
         if [ "$turtle_renamed" != "True" ]; then
@@ -219,11 +219,11 @@ fi
           boxturtle_name="AMS_1"
         fi
         printf "1. OpenAMS Name: %s \n" "$boxturtle_name"
-      elif [ "$installation_type" == "VVD" ]; then
+      elif [ "$installation_type" == "ViViD" ]; then
         if [ "$turtle_renamed" != "True" ]; then
           boxturtle_name="Vivid_1"
         fi
-        printf "1. VVD Name: %s \n" "$boxturtle_name"
+        printf "1. ViViD Name: %s \n" "$boxturtle_name"
       fi
       if [ "$installation_type" == "HTLF" ]; then
         printf "D. HTLF Board Type: %s \n" "$htlf_board_type"
@@ -300,6 +300,7 @@ fi
           message="${boxturtle_name} created successfully, please look over config file and update lane numbers."
           message+="\nAdditionally, please ensure any MCU connections are updated in the appropriate files (CANBus, serial, etc)"
           message+="\nThis is not a 100% turn-key solution and will require some manual configuration based on your specific setup."
+          message+="\n\n${RED}Please restart the script after installation to install additional units or make changes to the current unit.${NC}"
           export message
         fi
         ;;
