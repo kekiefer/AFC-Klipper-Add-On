@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed M104/M109 macros to work as expected on tools when a lane is not yet loaded
 
+## [2026-02-15]
+### Added
+- ViViD unit support, including new MCU configuration and pin mappings (RFID has yet to be implemented).
+### Fixed
+- Wrong pin assignment in QuattroBox MCU alias for MMB v2.0
+
 ## [2026-02-11]
 ### Added
 - Ability to save current extrude temp when loading/unloading and restore temp if `restore_extruder_temp_on_load_or_unload` is set in AFC.cfg

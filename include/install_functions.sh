@@ -69,6 +69,11 @@ template_unit_files() {
 
 copy_unit_files() {
   case "$installation_type" in
+  "VVD")
+    cp "${afc_path}/templates/AFC_Vivid_1.cfg" "${afc_config_dir}/AFC_Vivid_1.cfg"
+    cp "${afc_path}/templates/AFC_Hardware-AFC.cfg" "${afc_config_dir}/AFC_Hardware.cfg"
+    cp "${afc_path}/config/mcu/Vivid.cfg" "${afc_config_dir}/mcu/Vivid.cfg"
+    ;;
   "BoxTurtle (4-Lane)")
     cp "${afc_path}/config/mcu/AFC_Lite.cfg" "${afc_config_dir}/mcu/AFC_Lite.cfg"
     cp "${afc_path}/templates/AFC_Hardware-AFC.cfg" "${afc_config_dir}/AFC_Hardware.cfg"
@@ -229,6 +234,12 @@ elif [ "$installation_type" == "OpenAMS" ]; then
 - Review and update the ${afc_config_dir}/AFC_AMS_1.cfg file for your AMS unit settings.
 
 - Ensure OpenAMS is properly installed and configured per their instructions.
+  """
+elif [ "$installation_type" == "VVD" ]; then
+  message+="""
+- Ensure you enter your serial information in the ${afc_config_dir}/AFC_Vivid_1.cfg file
+
+- Review the ${afc_config_dir}/AFC_Hardware.cfg file to reference the proper buffer configuration and pins.
   """
 fi
 
