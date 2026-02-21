@@ -38,6 +38,11 @@ except:
     err_str = ERROR_STR.format(import_lib="AFC_lane", trace=traceback.format_exc())
     raise config_error(err_str)
 
+# Common message to be used when and displayed when lanes need to be ejected to calibrate dist_hub
+CALI_WARN = "The following lanes ({lanes}) have already been calibrated, if you continue "
+CALI_WARN += "with calibration then the filament for selected lanes will be ejected. "
+CALI_WARN += "Once filament is reinserted, then lanes will be calibrated.\n"
+
 class afcUnit:
     HOMING_DELTA = 300  # Delta for which to warn if homing move delta is not within this amount from
                         # command move distance.
@@ -55,6 +60,7 @@ class afcUnit:
         self.lanes: Dict[str, AFCLane]      = {}
         self.logo       = '<span class=success--text>Ready\n</span>'
         self.logo_error = '<span class=error--text>Not Ready</span>\n'
+        self._eject_to_calibrate = False
 
         # Objects
         self.buffer_obj: Optional[AFCTrigger|None]      = None
@@ -316,12 +322,22 @@ class afcUnit:
         group_buttons = []
         index = 0
         title = '{} Lane Calibration'.format(self.name)
-        text  = ('Select a loaded lane from {} to calibrate length from extruder to hub. '
+
+        text = ""
+        # Check to see if lanes that need to be ejected have already been calibrated and add
+        # message so user knows which lanes will be ejected and then calibrated on next filament
+        # load.
+        lanes = self.get_calibrated_lanes()
+        if lanes is not None:
+            lanes = ", ".join(lanes)
+            text = CALI_WARN.format(lanes=lanes)
+        text += ('Select a loaded lane from {} to calibrate length from extruder to hub. '
                  'Config option: dist_hub').format(self.name)
 
         # Create buttons for each lane and group every 4 lanes together
         for lane in self.lanes.values():
-            if lane.load_state:
+            if (lane.load_state
+                and not lane.tool_loaded):
                 button_label = "{}".format(lane)
                 # Do a bowden length calibration for direct hubs, dist_hub length gets set properly this way
                 if lane.is_direct_hub():
@@ -606,6 +622,20 @@ class afcUnit:
 
     def calibration_lane_message(self) -> str:
         return ""
+
+    def get_calibrated_lanes(self) -> Optional[list[str]]:
+        """
+        Helper method to return lanes in a unit that have already been calibrated and require
+        lane to be ejected to be calibrated correctly.
+
+        :return list: List of lanes that have already been calibrated
+        """
+        lanes = None
+        if self._eject_to_calibrate:
+            lanes = [ lane.name for lane in self.lanes.values() if (lane.load_state
+                                                                    and lane.calibrated_lane
+                                                                    and not lane.tool_loaded)]
+        return lanes
 
     def get_td1_data(self, cur_lane: AFCLane, compare_time: datetime,
                      ignore_time: bool=False) -> bool:
