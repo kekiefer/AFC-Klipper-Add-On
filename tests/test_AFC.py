@@ -10,6 +10,7 @@ Covers:
   - afc._cooldown_last_extruder: old-extruder temp-drop logic
   - afc._heat_next_extruder: explicit next_temp path
   - afc.CHANGE_TOOL: adjusting_temperature with new_extruder_temp
+  - afc.CHANGE_TOOL: stale lane_loaded on destination extruder after restart
   - afc.cmd_CHANGE_TOOL: NEW_EXTRUDER_TEMP parameter parsing
 """
 
@@ -766,4 +767,122 @@ class TestCmdChangeTool_NewExtruderTempParsing:
         obj.CHANGE_TOOL.assert_not_called()
 
 
+# ── CHANGE_TOOL: stale lane_loaded on destination extruder ────────────────────
+
+def _make_afc_for_stale_lane():
+    """
+    Build an afc instance simulating a post-restart state where:
+      - The active extruder is 'extruder' (Turtle_2, no lane loaded)
+      - The destination extruder is 'extruder1' (Turtle_1)
+      - 'extruder1' still has lane4 marked as loaded from the prior session
+      - The print wants to load lane2 (also on extruder1)
+    """
+    from tests.test_AFC_lane import _make_afc_lane
+
+    obj = _make_afc()
+    obj.afcDeltaTime = MagicMock()
+    obj.afc_stats = MagicMock()
+    obj.afc_stats.average_toolchange_time = MagicMock()
+    obj.testing = True
+    obj.save_pos = MagicMock()
+    obj.restore_pos = MagicMock()
+    obj.TOOL_LOAD = MagicMock(return_value=True)
+    obj.TOOL_UNLOAD = MagicMock(return_value=True)
+    obj._check_bypass = MagicMock(return_value=False)
+    obj._heat_next_extruder = MagicMock()
+    obj._cooldown_last_extruder = MagicMock()
+    obj._wait_for_temp_within_tolerance = MagicMock()
+    obj.error = MagicMock()
+
+    # Destination extruder (extruder1 / Turtle_1) — has lane4 stale-loaded
+    dest_extruder = MagicMock()
+    dest_extruder.name = "extruder1"
+    dest_extruder.lane_loaded = "lane4"   # stale from prior session
+    dest_extruder.deadband = 2.0
+    dest_extruder.estats = MagicMock()
+
+    # The stale lane (lane4) that needs to be unloaded
+    stale_lane = _make_afc_lane("AFC_stepper lane4")
+    stale_lane.extruder_obj = dest_extruder
+    stale_lane._afc_prep_done = True
+    stale_lane.status = AFCLaneState.LOADED
+    obj.lanes["lane4"] = stale_lane
+
+    # The requested lane (lane2) on the same extruder1
+    target_lane = _make_afc_lane("AFC_stepper lane2")
+    target_lane.extruder_obj = dest_extruder
+    target_lane._afc_prep_done = True
+    target_lane.status = AFCLaneState.LOADED
+    obj.lanes["lane2"] = target_lane
+
+    # Active extruder is 'extruder' (Turtle_2) — nothing loaded
+    obj.function.get_current_lane.return_value = None   # self.current → None
+    obj.function.get_current_extruder.return_value = "extruder"
+    obj.function.in_print.return_value = False
+    obj.function.is_paused.return_value = False
+    obj.function.log_toolhead_pos = MagicMock()
+    obj.function._handle_activate_extruder = MagicMock()
+
+    return obj, target_lane, stale_lane, dest_extruder
+
+
+class TestChangeTool_StaleLaneOnDestExtruder:
+    """
+    Tests for the stale lane_loaded fix in CHANGE_TOOL.
+
+    Reproduces the post-restart scenario: active extruder has nothing loaded
+    (self.current is None), but the destination extruder still has a different
+    lane marked as loaded from a prior session.
+    """
+
+    def test_unloads_stale_lane_before_loading_target(self):
+        """TOOL_UNLOAD must be called for the stale lane (lane4) before loading lane2."""
+        obj, target_lane, stale_lane, dest_extruder = _make_afc_for_stale_lane()
+        obj.CHANGE_TOOL(target_lane)
+        obj.TOOL_UNLOAD.assert_called_once_with(stale_lane, set_start_time=False)
+
+    def test_tool_load_called_after_stale_unload(self):
+        """TOOL_LOAD is called for the target lane after the stale unload."""
+        obj, target_lane, stale_lane, dest_extruder = _make_afc_for_stale_lane()
+        obj.CHANGE_TOOL(target_lane)
+        obj.TOOL_LOAD.assert_called_once_with(target_lane, None, set_start_time=False)
+
+    def test_unload_before_load_ordering(self):
+        """TOOL_UNLOAD must be called before TOOL_LOAD."""
+        call_order = []
+        obj, target_lane, stale_lane, dest_extruder = _make_afc_for_stale_lane()
+        obj.TOOL_UNLOAD.side_effect = lambda *a, **kw: (call_order.append("unload"), True)[1]
+        obj.TOOL_LOAD.side_effect   = lambda *a, **kw: (call_order.append("load"),   True)[1]
+        obj.CHANGE_TOOL(target_lane)
+        assert call_order == ["unload", "load"], f"Wrong order: {call_order}"
+
+    def test_no_stale_unload_when_destination_already_loaded_with_target(self):
+        """If extruder1 already has lane2 loaded, no unload is triggered."""
+        obj, target_lane, stale_lane, dest_extruder = _make_afc_for_stale_lane()
+        dest_extruder.lane_loaded = "lane2"   # already the target — no stale
+        obj.CHANGE_TOOL(target_lane)
+        obj.TOOL_UNLOAD.assert_not_called()
+
+    def test_no_stale_unload_when_current_extruder_is_active(self):
+        """Normal mid-print swap (self.current is not None) does not trigger the stale path."""
+        obj, target_lane, stale_lane, dest_extruder = _make_afc_for_stale_lane()
+        # Make self.current return lane4 (normal case — active extruder has it loaded)
+        obj.function.get_current_lane.return_value = "lane4"
+        obj.CHANGE_TOOL(target_lane)
+        # TOOL_UNLOAD should be called once, via the normal self.current path, for lane4
+        obj.TOOL_UNLOAD.assert_called_once_with(stale_lane, set_start_time=False)
+
+    def test_aborts_if_stale_unload_fails(self):
+        """If TOOL_UNLOAD returns False for the stale lane, TOOL_LOAD must not be called."""
+        obj, target_lane, stale_lane, dest_extruder = _make_afc_for_stale_lane()
+        obj.TOOL_UNLOAD.return_value = False
+        obj.CHANGE_TOOL(target_lane)
+        obj.TOOL_LOAD.assert_not_called()
+
+    def test_no_stale_unload_when_dest_extruder_has_nothing_loaded(self):
+        """If the destination extruder has lane_loaded=None, no unload is triggered."""
+        obj, target_lane, stale_lane, dest_extruder = _make_afc_for_stale_lane()
+        dest_extruder.lane_loaded = None
+        obj.CHANGE_TOOL(target_lane)
+        obj.TOOL_UNLOAD.assert_not_called()
 

@@ -1277,8 +1277,6 @@ class afc:
         # Verify that printer is in absolute mode
         self.function.check_absolute_mode("TOOL_LOAD")
 
-        # TODO: add check to make sure current extruder is not loaded with a lane, mainly for scenarios with multuple toolheads
-
         # If the current extruder is not the one associated with the lane, switch to it.
         if self.function.get_current_extruder() != cur_lane.extruder_obj.name:
             cur_lane.tool_swap()
@@ -2108,15 +2106,23 @@ class afc:
                     self.current_toolchange += 1
                     self.logger.raw("//      Change {} out of {}".format(self.current_toolchange, self.number_of_toolchanges))
 
-                # If a current lane is loaded, unload it first.
-                if self.current is not None:
-                    if self.current not in self.lanes:
-                        self.error.AFC_error('{} Unknown'.format(self.current))
+                # Determine which lane needs to be unloaded before loading the new one.
+                # Correctly handle the case where the current lane is None, which can occur during
+                # the first tool change, to a toolhead that already has something loaded.
+                lane_to_unload = self.current
+                if lane_to_unload is None:
+                    dest_extruder_loaded = cur_lane.extruder_obj.lane_loaded
+                    if dest_extruder_loaded is not None and dest_extruder_loaded != cur_lane.name:
+                        lane_to_unload = dest_extruder_loaded
+
+                if lane_to_unload is not None:
+                    if lane_to_unload not in self.lanes:
+                        self.error.AFC_error('{} Unknown'.format(lane_to_unload))
                         return
-                    if not self.TOOL_UNLOAD(self.lanes[self.current], set_start_time=False):
+                    if not self.TOOL_UNLOAD(self.lanes[lane_to_unload], set_start_time=False):
                         # Abort if the unloading process fails.
                         msg = (' UNLOAD ERROR NOT CLEARED')
-                        self.error.fix(msg, self.lanes[self.current])  #send to error handling
+                        self.error.fix(msg, self.lanes[lane_to_unload])  #send to error handling
                         return
 
             if adjusting_temperature:
